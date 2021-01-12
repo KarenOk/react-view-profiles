@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import logo from "./images/logo_pink.svg";
+import loader from "./images/loader.gif";
+import notFound from "./images/search_illustration.svg";
 import avatarWhite from "./images/icons/avatar_white.svg";
 import avatarPink from "./images/icons/avatar_pink.svg";
 import avatarBlue from "./images/icons/avatar_blue.svg";
@@ -11,10 +13,16 @@ function App() {
 	const ITEMS_PER_PAGE = 20;
 	const [pageCount, setPageCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
+	const [loading, setLoading] = useState(true);
+	const [profiles, setProfiles] = useState(null);
 
 	useEffect(() => {
-		if (data) setPageCount(Math.ceil(data.records.profiles.length / ITEMS_PER_PAGE));
-	}, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+		setProfiles(data.records.profiles);
+	}, []);
+
+	useEffect(() => {
+		if (profiles) setPageCount(Math.ceil(profiles.length / ITEMS_PER_PAGE));
+	}, [profiles]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handlePageClick = e => {
 		const selectedPage = e.selected;
@@ -52,83 +60,99 @@ function App() {
 			</header>
 
 			<main className="app__content">
-				<div className="content">
-					<h2 className="content__heading"> Orders Placed</h2>
-					<form className="content__form">
-						<input className="content__search-input" aria-label="Search table" placeholder="Search..." />
-						<div className="content__filters">
-							<div className="content__filter">
-								<label htmlFor="gender" className="content__filter-label">
-									Gender
-								</label>
-								<select className="content__filter-dropdown" id="gender">
-									<option>All</option>
-								</select>
+				{profiles ? (
+					<div className="content">
+						<h2 className="content__heading"> Profiles </h2>
+						<form className="content__form">
+							<input
+								className="content__search-input"
+								aria-label="Search table"
+								placeholder="Search..."
+							/>
+							<div className="content__filters">
+								<div className="content__filter">
+									<label htmlFor="gender" className="content__filter-label">
+										Gender
+									</label>
+									<select className="content__filter-dropdown" id="gender">
+										<option>All</option>
+									</select>
+								</div>
+								<div className="content__filter">
+									<label htmlFor="pm" className="content__filter-label">
+										Payment Method
+									</label>
+									<select className="content__filter-dropdown" id="pm">
+										<option>All</option>
+									</select>
+								</div>
+								<div className="content__filter">
+									<label htmlFor="cc_type" className="content__filter-label">
+										Credit Card Type
+									</label>
+									<select className="content__filter-dropdown" id="cc_type">
+										<option>All</option>
+									</select>
+								</div>
 							</div>
-							<div className="content__filter">
-								<label htmlFor="pm" className="content__filter-label">
-									Payment Method
-								</label>
-								<select className="content__filter-dropdown" id="pm">
-									<option>All</option>
-								</select>
-							</div>
-							<div className="content__filter">
-								<label htmlFor="cc_type" className="content__filter-label">
-									Credit Card Type
-								</label>
-								<select className="content__filter-dropdown" id="cc_type">
-									<option>All</option>
-								</select>
-							</div>
-						</div>
-					</form>
-					<table className="content__table">
-						<tr className="content__table-row">
-							<th className="content__table-header"></th>
-							<th className="content__table-header"> First Name</th>
-							<th className="content__table-header"> Last Name</th>
-							<th className="content__table-header"> Username</th>
-							<th className="content__table-header"> Email</th>
-							<th className="content__table-header"> Phone Number</th>
-							<th className="content__table-header"> Payment Method</th>
-							<th className="content__table-header"> Credit Card Type </th>
-							<th className="content__table-header"></th>
-						</tr>
-						{data.records.profiles
-							.slice(ITEMS_PER_PAGE * currentPage, ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE)
-							.map(profile => (
-								<tr className="content__table-row">
-									<td className="content__table-cell">
-										<div className={`user__avatar-cont content__table-img-cont`}>
-											<img
-												src={
-													profile["Gender"] === "Female"
-														? avatarPink
-														: profile["Gender"] === "Male"
-														? avatarBlue
-														: avatarWhite
-												}
-												className="user__avatar content__table-img"
-												alt={profile["FirstName"]}
-											/>
-										</div>
-									</td>
-									<td className="content__table-cell"> {profile["FirstName"]}</td>
-									<td className="content__table-cell"> {profile["LastName"]}</td>
-									<td className="content__table-cell"> {profile["UserName"]}</td>
-									<td className="content__table-cell"> {profile["Email"]}</td>
-									<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
-									<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
-									<td className="content__table-cell"> {profile["CreditCardType"]}</td>
-									<td className="content__table-cell">
-										<button className="content__table-btn"> View </button>
-									</td>
-								</tr>
-							))}
-					</table>
-					<Paginate pageCount={pageCount} onPageChange={handlePageClick} />
-				</div>
+						</form>
+						<table className="content__table">
+							<tr className="content__table-row">
+								<th className="content__table-header"></th>
+								<th className="content__table-header"> First Name</th>
+								<th className="content__table-header"> Last Name</th>
+								<th className="content__table-header"> Username</th>
+								<th className="content__table-header"> Email</th>
+								<th className="content__table-header"> Phone Number</th>
+								<th className="content__table-header"> Payment Method</th>
+								<th className="content__table-header"> Credit Card Type </th>
+								<th className="content__table-header"></th>
+							</tr>
+							{profiles
+								.slice(ITEMS_PER_PAGE * currentPage, ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE)
+								.map(profile => (
+									<tr className="content__table-row">
+										<td className="content__table-cell">
+											<div className={`user__avatar-cont content__table-img-cont`}>
+												<img
+													src={
+														profile["Gender"] === "Female"
+															? avatarPink
+															: profile["Gender"] === "Male"
+															? avatarBlue
+															: avatarWhite
+													}
+													className="user__avatar content__table-img"
+													alt={profile["FirstName"]}
+												/>
+											</div>
+										</td>
+										<td className="content__table-cell"> {profile["FirstName"]}</td>
+										<td className="content__table-cell"> {profile["LastName"]}</td>
+										<td className="content__table-cell"> {profile["UserName"]}</td>
+										<td className="content__table-cell"> {profile["Email"]}</td>
+										<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
+										<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
+										<td className="content__table-cell"> {profile["CreditCardType"]}</td>
+										<td className="content__table-cell">
+											<button className="content__table-btn"> View </button>
+										</td>
+									</tr>
+								))}
+						</table>
+						<Paginate pageCount={pageCount} onPageChange={handlePageClick} />
+					</div>
+				) : loading ? (
+					<div className="no-content">
+						<img className="no-content__loader" alt="" src={loader} />
+						<p className="no-content__desc"> Loading... </p>
+					</div>
+				) : (
+					<div className="no-content">
+						<img className="no-content__img" alt="" src={notFound} />
+						<p className="no-content__desc"> No profiles were found. </p>
+					</div>
+				)}
 			</main>
 		</div>
 	);

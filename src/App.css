@@ -198,3 +198,25 @@
 .content__table tr:last-child td:last-child {
 	border-bottom-right-radius: 10px;
 }
+
+.no-content {
+	width: 100%;
+	min-height: 70vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.no-content__loader {
+	width: 50px;
+}
+.no-content__img {
+	width: 200px;
+	margin-bottom: 10px;
+}
+
+.no-content__desc {
+	margin-top: 0;
+	font-size: 1.3em;
+}
