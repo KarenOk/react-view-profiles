@@ -6,27 +6,67 @@ import notFound from "./images/search_illustration.svg";
 import avatarWhite from "./images/icons/avatar_white.svg";
 import avatarPink from "./images/icons/avatar_pink.svg";
 import avatarBlue from "./images/icons/avatar_blue.svg";
-import data from "./data.json";
 import Paginate from "./components/Paginate/Paginate";
+import data from "./data.json";
 
 function App() {
 	const ITEMS_PER_PAGE = 20;
 	const [pageCount, setPageCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
-	const [loading, setLoading] = useState(true);
+
+	const [loading, setLoading] = useState(false);
 	const [profiles, setProfiles] = useState(null);
+	const [filtered, setFiltered] = useState(null);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
+		// fetchProfiles();
 		setProfiles(data.records.profiles);
 	}, []);
 
 	useEffect(() => {
-		if (profiles) setPageCount(Math.ceil(profiles.length / ITEMS_PER_PAGE));
-	}, [profiles]); // eslint-disable-line react-hooks/exhaustive-deps
+		if (profiles) setPageCount(Math.ceil((filtered || profiles).length / ITEMS_PER_PAGE));
+	}, [profiles, filtered]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Debounce Search
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			console.log(searchQuery);
+			searchProfiles();
+		}, 1000);
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [searchQuery]);
 
 	const handlePageClick = e => {
 		const selectedPage = e.selected;
 		setCurrentPage(selectedPage);
+	};
+
+	const fetchProfiles = async () => {
+		setLoading(true);
+		const res = await fetch("https://api.enye.tech/v1/challenge/records");
+		const data = await res.json();
+		setProfiles(data.records.profiles);
+		setLoading(false);
+	};
+
+	const searchProfiles = () => {
+		const regex = new RegExp(searchQuery, "gi");
+
+		if (!profiles) return;
+		if (!searchQuery) setFiltered(null);
+
+		let filtered = profiles.filter(
+			profile =>
+				profile["FirstName"].match(regex) ||
+				profile["LastName"].match(regex) ||
+				profile["Email"].match(regex) ||
+				profile["UserName"].match(regex) ||
+				profile["PhoneNumber"].match(regex)
+		);
+		setFiltered(filtered);
 	};
 
 	return (
@@ -68,6 +108,8 @@ function App() {
 								className="content__search-input"
 								aria-label="Search table"
 								placeholder="Search..."
+								value={searchQuery}
+								onChange={e => setSearchQuery(e.target.value)}
 							/>
 							<div className="content__filters">
 								<div className="content__filter">
@@ -96,50 +138,57 @@ function App() {
 								</div>
 							</div>
 						</form>
-						<table className="content__table">
-							<tr className="content__table-row">
-								<th className="content__table-header"></th>
-								<th className="content__table-header"> First Name</th>
-								<th className="content__table-header"> Last Name</th>
-								<th className="content__table-header"> Username</th>
-								<th className="content__table-header"> Email</th>
-								<th className="content__table-header"> Phone Number</th>
-								<th className="content__table-header"> Payment Method</th>
-								<th className="content__table-header"> Credit Card Type </th>
-								<th className="content__table-header"></th>
-							</tr>
-							{profiles
-								.slice(ITEMS_PER_PAGE * currentPage, ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE)
-								.map(profile => (
-									<tr className="content__table-row">
-										<td className="content__table-cell">
-											<div className={`user__avatar-cont content__table-img-cont`}>
-												<img
-													src={
-														profile["Gender"] === "Female"
-															? avatarPink
-															: profile["Gender"] === "Male"
-															? avatarBlue
-															: avatarWhite
-													}
-													className="user__avatar content__table-img"
-													alt={profile["FirstName"]}
-												/>
-											</div>
-										</td>
-										<td className="content__table-cell"> {profile["FirstName"]}</td>
-										<td className="content__table-cell"> {profile["LastName"]}</td>
-										<td className="content__table-cell"> {profile["UserName"]}</td>
-										<td className="content__table-cell"> {profile["Email"]}</td>
-										<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
-										<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
-										<td className="content__table-cell"> {profile["CreditCardType"]}</td>
-										<td className="content__table-cell">
-											<button className="content__table-btn"> View </button>
-										</td>
-									</tr>
-								))}
-						</table>
+						{(filtered && filtered.length) || !filtered ? (
+							<table className="content__table">
+								<tr className="content__table-row">
+									<th className="content__table-header"></th>
+									<th className="content__table-header"> First Name</th>
+									<th className="content__table-header"> Last Name</th>
+									<th className="content__table-header"> Username</th>
+									<th className="content__table-header"> Email</th>
+									<th className="content__table-header"> Phone Number</th>
+									<th className="content__table-header"> Payment Method</th>
+									<th className="content__table-header"> Credit Card Type </th>
+									<th className="content__table-header"></th>
+								</tr>
+								{(filtered || profiles)
+									.slice(ITEMS_PER_PAGE * currentPage, ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE)
+									.map((profile, i) => (
+										<tr className="content__table-row" key={i}>
+											<td className="content__table-cell">
+												<div className={`user__avatar-cont content__table-img-cont`}>
+													<img
+														src={
+															profile["Gender"] === "Female"
+																? avatarPink
+																: profile["Gender"] === "Male"
+																? avatarBlue
+																: avatarWhite
+														}
+														className="user__avatar content__table-img"
+														alt={profile["FirstName"]}
+													/>
+												</div>
+											</td>
+											<td className="content__table-cell"> {profile["FirstName"]}</td>
+											<td className="content__table-cell"> {profile["LastName"]}</td>
+											<td className="content__table-cell"> {profile["UserName"]}</td>
+											<td className="content__table-cell"> {profile["Email"]}</td>
+											<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
+											<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
+											<td className="content__table-cell"> {profile["CreditCardType"]}</td>
+											<td className="content__table-cell">
+												<button className="content__table-btn"> View </button>
+											</td>
+										</tr>
+									))}
+							</table>
+						) : (
+							<div className="no-content">
+								<img className="no-content__img" alt="" src={notFound} />
+								<p className="no-content__desc"> No profiles were found. </p>
+							</div>
+						)}
 						<Paginate pageCount={pageCount} onPageChange={handlePageClick} />
 					</div>
 				) : loading ? (
