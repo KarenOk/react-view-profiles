@@ -18,10 +18,25 @@ function App() {
 	const [profiles, setProfiles] = useState(null);
 	const [filtered, setFiltered] = useState(null);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [filters, setFilters] = useState({ genders: new Set(), cc_types: new Set(), payment_methods: new Set() });
 
 	useEffect(() => {
 		// fetchProfiles();
 		setProfiles(data.records.profiles);
+
+		const filters = {
+			genders: new Set(),
+			cc_types: new Set(),
+			payment_methods: new Set()
+		};
+
+		data.records.profiles.forEach(profile => {
+			filters.genders.add(profile["Gender"]);
+			filters.cc_types.add(profile["CreditCardType"]);
+			filters.payment_methods.add(profile["PaymentMethod"]);
+		});
+
+		setFilters(filters);
 	}, []);
 
 	useEffect(() => {
@@ -44,12 +59,29 @@ function App() {
 		setCurrentPage(selectedPage);
 	};
 
+	const capitalize = str => (str ? str[0].toUpperCase() + str.slice(1) : "");
+
 	const fetchProfiles = async () => {
 		setLoading(true);
 		const res = await fetch("https://api.enye.tech/v1/challenge/records");
 		const data = await res.json();
 		setProfiles(data.records.profiles);
 		setLoading(false);
+
+		// Get filters from data
+		const filters = {
+			genders: new Set(),
+			cc_types: new Set(),
+			payment_methods: new Set()
+		};
+
+		data.records.profiles.forEach(profile => {
+			filters.genders.add(profile["Gender"]);
+			filters.cc_types.add(profile["CreditCardType"]);
+			filters.payment_methods.add(profile["PaymentMethod"]);
+		});
+
+		setFilters(filters);
 	};
 
 	const searchProfiles = () => {
@@ -117,7 +149,14 @@ function App() {
 										Gender
 									</label>
 									<select className="content__filter-dropdown" id="gender">
-										<option>All</option>
+										<option className="content__filter-option" value="">
+											All
+										</option>
+										{Array.from(filters.genders).map((option, i) => (
+											<option className="content__filter-option" key={i} value={option}>
+												{capitalize(option)}
+											</option>
+										))}
 									</select>
 								</div>
 								<div className="content__filter">
@@ -125,7 +164,14 @@ function App() {
 										Payment Method
 									</label>
 									<select className="content__filter-dropdown" id="pm">
-										<option>All</option>
+										<option className="content__filter-option" value="">
+											All
+										</option>
+										{Array.from(filters.payment_methods).map((option, i) => (
+											<option className="content__filter-option" key={i} value={option}>
+												{capitalize(option)}
+											</option>
+										))}
 									</select>
 								</div>
 								<div className="content__filter">
@@ -133,7 +179,14 @@ function App() {
 										Credit Card Type
 									</label>
 									<select className="content__filter-dropdown" id="cc_type">
-										<option>All</option>
+										<option className="content__filter-option" value="">
+											All
+										</option>
+										{Array.from(filters.cc_types).map((option, i) => (
+											<option className="content__filter-option" key={i} value={option}>
+												{capitalize(option)}
+											</option>
+										))}
 									</select>
 								</div>
 							</div>
