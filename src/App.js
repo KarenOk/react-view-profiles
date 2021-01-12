@@ -7,7 +7,6 @@ import avatarWhite from "./images/icons/avatar_white.svg";
 import avatarPink from "./images/icons/avatar_pink.svg";
 import avatarBlue from "./images/icons/avatar_blue.svg";
 import Paginate from "./components/Paginate/Paginate";
-import data from "./data.json";
 
 function App() {
 	const ITEMS_PER_PAGE = 20;
@@ -25,28 +24,13 @@ function App() {
 		payment_method: ""
 	});
 	const [filterList, setFilterList] = useState({
-		gender: new Set(),
+		genders: new Set(),
 		cc_types: new Set(),
 		payment_methods: new Set()
 	});
 
 	useEffect(() => {
-		// fetchProfiles();
-		setProfiles(data.records.profiles);
-
-		const filterList = {
-			genders: new Set(),
-			cc_types: new Set(),
-			payment_methods: new Set()
-		};
-
-		data.records.profiles.forEach(profile => {
-			filterList.genders.add(profile["Gender"]);
-			filterList.cc_types.add(profile["CreditCardType"]);
-			filterList.payment_methods.add(profile["PaymentMethod"]);
-		});
-
-		setFilterList(filterList);
+		fetchProfiles();
 	}, []);
 
 	useEffect(() => {
