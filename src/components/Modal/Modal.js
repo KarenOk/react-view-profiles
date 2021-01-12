@@ -10,22 +10,27 @@ const Modal = props => {
 	return (
 		<Rodal {...props} height={350} width={null}>
 			{props.profile ? (
-				<table className="modal__data-table">
-					{Object.keys(props.profile).map(key => (
-						<tr className="modal__data-row">
-							<th className="modal__data-key"> {splitCamelCase(key)} </th>
-							<td
-								className={`modal__data-value ${
-									key === "PaymentMethod" ? "modal__data-value--cap" : ""
-								}`}
-							>
-								{props.profile[key]}
-							</td>
-						</tr>
-					))}
-				</table>
+				<>
+					<h1 className="modal__header">
+						{props.profile["FirstName"]} {props.profile["LastName"]}
+					</h1>
+					<table className="modal__data-table">
+						{Object.keys(props.profile).map(key => (
+							<tr className="modal__data-row">
+								<th className="modal__data-key"> {splitCamelCase(key)} </th>
+								<td
+									className={`modal__data-value ${
+										key === "PaymentMethod" ? "modal__data-value--cap" : ""
+									}`}
+								>
+									{props.profile[key]}
+								</td>
+							</tr>
+						))}
+					</table>
+				</>
 			) : (
-				<div />
+				<p> No data. </p>
 			)}
 		</Rodal>
 	);

@@ -12,8 +12,12 @@
 	background: red;
 }
 
+.modal__header {
+	text-align: center;
+	font-size: 1.6em;
+}
 .modal__data-table {
-	margin-top: 30px;
+	margin-top: 10px;
 	text-align: left;
 }
 
