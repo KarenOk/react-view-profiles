@@ -130,7 +130,7 @@ function App() {
 			<header className="app__header">
 				<div className="app__header_item app__header_item--left">
 					<img src={logo} className="app__logo" alt="Malmart" />
-					<h1 className="app_heading"> Mallmart </h1>
+					<h1 className="app__heading"> Mallmart </h1>
 				</div>
 				<nav className="app__header_item app__nav">
 					<a href="/" className="app__nav-item">

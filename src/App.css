@@ -11,6 +11,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	font-size: 0.8em;
 }
 
 .app__header_item {
@@ -24,7 +25,11 @@
 }
 
 .app__heading {
-	margin: 0;
+	font-size: 1.6em;
+}
+
+.app__nav {
+	display: none;
 }
 
 .app__nav-item {
@@ -38,8 +43,8 @@
 }
 
 .user__avatar-cont {
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 35px;
 	border-radius: 50%;
 	background-color: #ccc;
 	margin-right: 10px;
@@ -47,9 +52,13 @@
 
 .user__avatar {
 	object-fit: cover;
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 35px;
 	border-radius: 50%;
+}
+
+.user__name {
+	font-size: 0.9em;
 }
 
 .app__content {
@@ -65,7 +74,7 @@
 
 .content__heading {
 	font-weight: 400;
-	font-size: 2.2em;
+	font-size: 1.6em;
 }
 
 .content__search-input {
@@ -86,18 +95,20 @@
 	display: flex;
 	align-items: center;
 	max-width: 600px;
+	flex-wrap: wrap;
 }
 
 .content__filter {
 	margin-right: 10px;
-	width: 100%;
+	min-width: 140px;
+	width: 30%;
 }
 
 .content__filter-label {
 	display: block;
 	font-size: 0.65em;
 	font-weight: bolder;
-	margin-bottom: 5px;
+	margin: 5px 0;
 }
 
 .content__filter-dropdown {
@@ -105,6 +116,15 @@
 	padding: 5px 10px;
 	border: 2px solid rgb(233, 233, 233);
 	border-radius: 3px;
+}
+
+.content__table-cont {
+	overflow-x: scroll;
+	margin: 0;
+}
+
+.content__table-caption {
+	font-size: 0;
 }
 
 .content__table {
@@ -140,6 +160,7 @@
 .content__table-cell {
 	padding: 10px;
 	cursor: pointer;
+	min-width: 110px;
 }
 
 .content__table-img-cont {
@@ -219,4 +240,36 @@
 .no-content__desc {
 	margin-top: 0;
 	font-size: 1.3em;
+}
+
+@media only screen and (min-width: 650px) {
+	.app__header {
+		font-size: 1em;
+	}
+
+	.app__heading {
+		font-size: 2.2em;
+	}
+
+	.app__nav {
+		display: block;
+	}
+
+	.user__avatar-cont {
+		width: 40px;
+		height: 40px;
+	}
+
+	.user__avatar {
+		width: 40px;
+		height: 40px;
+	}
+
+	.user__name {
+		font-size: 1em;
+	}
+
+	.content__heading {
+		font-size: 2em;
+	}
 }
