@@ -45,11 +45,11 @@ function App() {
 		return () => {
 			clearTimeout(handler);
 		};
-	}, [searchQuery]);
+	}, [searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		searchAndFilterProfiles();
-	}, [selectedFilters]);
+	}, [selectedFilters]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handlePageClick = e => {
 		const selectedPage = e.selected;
@@ -114,8 +114,8 @@ function App() {
 
 	const searchAndFilterProfiles = () => {
 		let temp = searchProfiles();
+		// pass data that has been searched through to filter
 		if (temp) temp = filterProfiles(temp);
-		// pass data to run filter function on
 		else return;
 
 		setFiltered(temp);
@@ -129,7 +129,7 @@ function App() {
 		<div className="app">
 			<header className="app__header">
 				<div className="app__header_item app__header_item--left">
-					<img src={logo} className="app__logo" />
+					<img src={logo} className="app__logo" alt="Malmart" />
 					<h1 className="app_heading"> Mallmart </h1>
 				</div>
 				<nav className="app__header_item app__nav">
@@ -228,50 +228,56 @@ function App() {
 							</div>
 						</form>
 						{(filtered && filtered.length) || !filtered ? (
-							<table className="content__table">
-								<tr className="content__table-row">
-									<th className="content__table-header"></th>
-									<th className="content__table-header"> First Name</th>
-									<th className="content__table-header"> Last Name</th>
-									<th className="content__table-header"> Username</th>
-									<th className="content__table-header"> Email</th>
-									<th className="content__table-header"> Phone Number</th>
-									<th className="content__table-header"> Payment Method</th>
-									<th className="content__table-header"> Credit Card Type </th>
-									<th className="content__table-header"></th>
-								</tr>
-								{(filtered || profiles)
-									.slice(ITEMS_PER_PAGE * currentPage, ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE)
-									.map((profile, i) => (
-										<tr className="content__table-row" key={i}>
-											<td className="content__table-cell">
-												<div className={`user__avatar-cont content__table-img-cont`}>
-													<img
-														src={
-															profile["Gender"] === "Female"
-																? avatarPink
-																: profile["Gender"] === "Male"
-																? avatarBlue
-																: avatarWhite
-														}
-														className="user__avatar content__table-img"
-														alt={profile["Gender"]}
-													/>
-												</div>
-											</td>
-											<td className="content__table-cell"> {profile["FirstName"]}</td>
-											<td className="content__table-cell"> {profile["LastName"]}</td>
-											<td className="content__table-cell"> {profile["UserName"]}</td>
-											<td className="content__table-cell"> {profile["Email"]}</td>
-											<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
-											<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
-											<td className="content__table-cell"> {profile["CreditCardType"]}</td>
-											<td className="content__table-cell">
-												<button className="content__table-btn"> View </button>
-											</td>
-										</tr>
-									))}
-							</table>
+							<figure className="content__table-cont">
+								<figcaption className="content__table-caption"> Table of profiles </figcaption>
+								<table className="content__table">
+									<tr className="content__table-row">
+										<th className="content__table-header"></th>
+										<th className="content__table-header"> First Name</th>
+										<th className="content__table-header"> Last Name</th>
+										<th className="content__table-header"> Username</th>
+										<th className="content__table-header"> Email</th>
+										<th className="content__table-header"> Phone Number</th>
+										<th className="content__table-header"> Payment Method</th>
+										<th className="content__table-header"> Credit Card Type </th>
+										<th className="content__table-header"></th>
+									</tr>
+									{(filtered || profiles)
+										.slice(
+											ITEMS_PER_PAGE * currentPage,
+											ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE
+										)
+										.map((profile, i) => (
+											<tr className="content__table-row" key={i}>
+												<td className="content__table-cell">
+													<div className={`user__avatar-cont content__table-img-cont`}>
+														<img
+															src={
+																profile["Gender"] === "Female"
+																	? avatarPink
+																	: profile["Gender"] === "Male"
+																	? avatarBlue
+																	: avatarWhite
+															}
+															className="user__avatar content__table-img"
+															alt={profile["Gender"]}
+														/>
+													</div>
+												</td>
+												<td className="content__table-cell"> {profile["FirstName"]}</td>
+												<td className="content__table-cell"> {profile["LastName"]}</td>
+												<td className="content__table-cell"> {profile["UserName"]}</td>
+												<td className="content__table-cell"> {profile["Email"]}</td>
+												<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
+												<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
+												<td className="content__table-cell"> {profile["CreditCardType"]}</td>
+												<td className="content__table-cell">
+													<button className="content__table-btn"> View </button>
+												</td>
+											</tr>
+										))}
+								</table>
+							</figure>
 						) : (
 							<div className="no-content">
 								<img className="no-content__img" alt="" src={notFound} />
