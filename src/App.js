@@ -239,67 +239,82 @@ function App() {
 								</div>
 							</form>
 							{(filtered && filtered.length) || !filtered ? (
-								<figure className="content__table-cont">
+								<figure className="content__figure">
 									<figcaption className="content__table-caption"> Table of profiles </figcaption>
-									<table className="content__table">
-										<tr className="content__table-row">
-											<th className="content__table-header"></th>
-											<th className="content__table-header"> First Name</th>
-											<th className="content__table-header"> Last Name</th>
-											<th className="content__table-header"> Username</th>
-											<th className="content__table-header"> Email</th>
-											<th className="content__table-header"> Phone Number</th>
-											<th className="content__table-header"> Payment Method</th>
-											<th className="content__table-header"> Credit Card Type </th>
-											<th className="content__table-header"></th>
-										</tr>
-										{(filtered || profiles)
-											.slice(
-												ITEMS_PER_PAGE * currentPage,
-												ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE
-											)
-											.map((profile, i) => (
-												<tr
-													className="content__table-row"
-													key={i}
-													onClick={() => openModal(profile)}
-												>
-													<td className="content__table-cell">
-														<div className={`user__avatar-cont content__table-img-cont`}>
-															<img
-																src={
-																	profile["Gender"] === "Female"
-																		? avatarPink
-																		: profile["Gender"] === "Male"
-																		? avatarBlue
-																		: avatarWhite
-																}
-																className="user__avatar content__table-img"
-																alt={profile["Gender"]}
-															/>
-														</div>
-													</td>
-													<td className="content__table-cell"> {profile["FirstName"]}</td>
-													<td className="content__table-cell"> {profile["LastName"]}</td>
-													<td className="content__table-cell"> {profile["UserName"]}</td>
-													<td className="content__table-cell"> {profile["Email"]}</td>
-													<td className="content__table-cell"> {profile["PhoneNumber"]}</td>
-													<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
-													<td className="content__table-cell">
-														{" "}
-														{profile["CreditCardType"]}
-													</td>
-													<td className="content__table-cell">
-														<button
-															className="content__table-btn"
-															aria-label="Click to view more"
-														>
-															<img className="content__table-btn-img" alt="" src={more} />
-														</button>
-													</td>
-												</tr>
-											))}
-									</table>
+									<div className="content__table-cont">
+										<table className="content__table">
+											<tr className="content__table-row">
+												<th className="content__table-header"></th>
+												<th className="content__table-header"> First Name</th>
+												<th className="content__table-header"> Last Name</th>
+												<th className="content__table-header"> Username</th>
+												<th className="content__table-header"> Email</th>
+												<th className="content__table-header"> Phone Number</th>
+												<th className="content__table-header"> Payment Method</th>
+												<th className="content__table-header"> Credit Card Type </th>
+												<th className="content__table-header"></th>
+											</tr>
+											{(filtered || profiles)
+												.slice(
+													ITEMS_PER_PAGE * currentPage,
+													ITEMS_PER_PAGE * currentPage + ITEMS_PER_PAGE
+												)
+												.map((profile, i) => (
+													<tr
+														className="content__table-row"
+														key={i}
+														onClick={() => openModal(profile)}
+													>
+														<td className="content__table-cell">
+															<div
+																className={`user__avatar-cont content__table-img-cont`}
+															>
+																<img
+																	src={
+																		profile["Gender"] === "Female"
+																			? avatarPink
+																			: profile["Gender"] === "Male"
+																			? avatarBlue
+																			: avatarWhite
+																	}
+																	className="user__avatar content__table-img"
+																	alt={profile["Gender"]}
+																/>
+															</div>
+														</td>
+														<td className="content__table-cell"> {profile["FirstName"]}</td>
+														<td className="content__table-cell"> {profile["LastName"]}</td>
+														<td className="content__table-cell"> {profile["UserName"]}</td>
+														<td className="content__table-cell"> {profile["Email"]}</td>
+														<td className="content__table-cell">
+															{" "}
+															{profile["PhoneNumber"]}
+														</td>
+														<td className="content__table-cell">
+															{" "}
+															{profile["PaymentMethod"]}
+														</td>
+														<td className="content__table-cell">
+															{" "}
+															{profile["CreditCardType"]}
+														</td>
+														<td className="content__table-cell">
+															<button
+																className="content__table-btn"
+																aria-label="Click to view more"
+															>
+																<img
+																	className="content__table-btn-img"
+																	alt=""
+																	src={more}
+																/>
+															</button>
+														</td>
+													</tr>
+												))}
+										</table>
+									</div>
+
 									<Paginate pageCount={pageCount} onPageChange={handlePageClick} />
 								</figure>
 							) : (

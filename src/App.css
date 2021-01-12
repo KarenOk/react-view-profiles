@@ -121,9 +121,14 @@
 	font-size: 16px;
 }
 
+.content__figure {
+	width: 100%;
+	margin: 0;
+}
+
 .content__table-cont {
 	overflow-x: scroll;
-	margin: 0;
+	width: 100%;
 }
 
 .content__table-caption {
