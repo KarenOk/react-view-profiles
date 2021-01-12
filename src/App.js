@@ -6,6 +6,7 @@ import notFound from "./images/search_illustration.svg";
 import avatarWhite from "./images/icons/avatar_white.svg";
 import avatarPink from "./images/icons/avatar_pink.svg";
 import avatarBlue from "./images/icons/avatar_blue.svg";
+import more from "./images/icons/more.svg";
 import Paginate from "./components/Paginate/Paginate";
 
 function App() {
@@ -272,7 +273,12 @@ function App() {
 												<td className="content__table-cell"> {profile["PaymentMethod"]}</td>
 												<td className="content__table-cell"> {profile["CreditCardType"]}</td>
 												<td className="content__table-cell">
-													<button className="content__table-btn"> View </button>
+													<button
+														className="content__table-btn"
+														aria-label="Click to view more"
+													>
+														<img className="content__table-btn-img" alt="" src={more} />
+													</button>
 												</td>
 											</tr>
 										))}

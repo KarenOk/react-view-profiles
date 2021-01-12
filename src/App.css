@@ -180,13 +180,14 @@
 }
 
 .content__table-btn {
-	background-color: #d54051;
+	background-color: transparent;
 	padding: 5px 10px;
 	cursor: pointer;
-	border-radius: 2px;
 	border: none;
-	color: white;
-	box-shadow: 2px 2px 13px #aaa;
+}
+
+.content__table-btn-img {
+	width: 20px;
 }
 
 .content__table-cell:first-of-type {
