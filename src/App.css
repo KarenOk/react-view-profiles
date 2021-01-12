@@ -6,7 +6,6 @@
 
 .app__header {
 	background-color: black;
-	/* background-color: #d54051; */
 	padding: 5px 20px;
 	color: white;
 	display: flex;
@@ -128,8 +127,6 @@
 }
 
 .content__table-row:first-of-type {
-	background-color: #d54051;
-	/* background-color: #333; */
 	color: white;
 }
 
@@ -137,7 +134,7 @@
 	padding: 20px 5px;
 	text-align: left;
 	font-size: 0.9em;
-	/* color: #333; */
+	color: #333;
 }
 
 .content__table-cell {
@@ -145,8 +142,26 @@
 	cursor: pointer;
 }
 
+.content__table-img-cont {
+	background-color: rgb(41, 40, 40);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.content__table-img {
+	width: 20px;
+	height: 20px;
+}
+
 .content__table-btn {
-	width: 50px;
+	background-color: #d54051;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 2px;
+	border: none;
+	color: white;
+	box-shadow: 2px 2px 13px #aaa;
 }
 
 .content__table-cell:first-of-type {

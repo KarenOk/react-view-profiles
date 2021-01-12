@@ -1,4 +1,7 @@
 import logo from "./images/logo_pink.svg";
+import avatarWhite from "./images/icons/avatar_white.svg";
+import avatarPink from "./images/icons/avatar_pink.svg";
+import avatarBlue from "./images/icons/avatar_blue.svg";
 import "./App.css";
 import data from "./data.json";
 
@@ -81,7 +84,19 @@ function App() {
 						{data.records.profiles.slice(0, 10).map(profile => (
 							<tr className="content__table-row">
 								<td className="content__table-cell">
-									<div className={`user__avatar-cont content__table-img `}></div>
+									<div className={`user__avatar-cont content__table-img-cont`}>
+										<img
+											src={
+												profile["Gender"] === "Female"
+													? avatarPink
+													: profile["Gender"] === "Male"
+													? avatarBlue
+													: avatarWhite
+											}
+											className="user__avatar content__table-img"
+											alt={profile["FirstName"]}
+										/>
+									</div>
 								</td>
 								<td className="content__table-cell"> {profile["FirstName"]}</td>
 								<td className="content__table-cell"> {profile["LastName"]}</td>
