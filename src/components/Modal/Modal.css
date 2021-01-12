@@ -1,0 +1,38 @@
+.rodal-dialog {
+	width: 90%;
+	overflow-y: scroll;
+	font-size: 0.8em;
+}
+
+.rodal-close:hover {
+	transform: scale(1.2);
+}
+.rodal .rodal-close:after,
+.rodal .rodal-close:before {
+	background: red;
+}
+
+.modal__data-table {
+	margin-top: 30px;
+	text-align: left;
+}
+
+.modal__data-key {
+	padding: 8px 5px;
+}
+
+.modal__data-value {
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.modal__data-value--cap {
+	text-transform: capitalize;
+}
+
+@media only screen and (min-width: 500px) {
+	.rodal-dialog {
+		width: 400px;
+		font-size: 0.85em;
+	}
+}
