@@ -16,27 +16,37 @@ function App() {
 
 	const [loading, setLoading] = useState(false);
 	const [profiles, setProfiles] = useState(null);
+
 	const [filtered, setFiltered] = useState(null);
 	const [searchQuery, setSearchQuery] = useState("");
-	const [filters, setFilters] = useState({ genders: new Set(), cc_types: new Set(), payment_methods: new Set() });
+	const [selectedFilters, setSelectedFilters] = useState({
+		gender: "",
+		cc_type: "",
+		payment_method: ""
+	});
+	const [filterList, setFilterList] = useState({
+		gender: new Set(),
+		cc_types: new Set(),
+		payment_methods: new Set()
+	});
 
 	useEffect(() => {
 		// fetchProfiles();
 		setProfiles(data.records.profiles);
 
-		const filters = {
+		const filterList = {
 			genders: new Set(),
 			cc_types: new Set(),
 			payment_methods: new Set()
 		};
 
 		data.records.profiles.forEach(profile => {
-			filters.genders.add(profile["Gender"]);
-			filters.cc_types.add(profile["CreditCardType"]);
-			filters.payment_methods.add(profile["PaymentMethod"]);
+			filterList.genders.add(profile["Gender"]);
+			filterList.cc_types.add(profile["CreditCardType"]);
+			filterList.payment_methods.add(profile["PaymentMethod"]);
 		});
 
-		setFilters(filters);
+		setFilterList(filterList);
 	}, []);
 
 	useEffect(() => {
@@ -46,13 +56,16 @@ function App() {
 	// Debounce Search
 	useEffect(() => {
 		const handler = setTimeout(() => {
-			console.log(searchQuery);
-			searchProfiles();
+			searchAndFilterProfiles();
 		}, 1000);
 		return () => {
 			clearTimeout(handler);
 		};
 	}, [searchQuery]);
+
+	useEffect(() => {
+		searchAndFilterProfiles();
+	}, [selectedFilters]);
 
 	const handlePageClick = e => {
 		const selectedPage = e.selected;
@@ -68,27 +81,27 @@ function App() {
 		setProfiles(data.records.profiles);
 		setLoading(false);
 
-		// Get filters from data
-		const filters = {
+		// Get filterList from data
+		const filterList = {
 			genders: new Set(),
 			cc_types: new Set(),
 			payment_methods: new Set()
 		};
 
 		data.records.profiles.forEach(profile => {
-			filters.genders.add(profile["Gender"]);
-			filters.cc_types.add(profile["CreditCardType"]);
-			filters.payment_methods.add(profile["PaymentMethod"]);
+			filterList.genders.add(profile["Gender"]);
+			filterList.cc_types.add(profile["CreditCardType"]);
+			filterList.payment_methods.add(profile["PaymentMethod"]);
 		});
 
-		setFilters(filters);
+		setFilterList(filterList);
 	};
 
 	const searchProfiles = () => {
 		const regex = new RegExp(searchQuery, "gi");
 
 		if (!profiles) return;
-		if (!searchQuery) setFiltered(null);
+		if (!searchQuery) return profiles;
 
 		let filtered = profiles.filter(
 			profile =>
@@ -98,7 +111,34 @@ function App() {
 				profile["UserName"].match(regex) ||
 				profile["PhoneNumber"].match(regex)
 		);
-		setFiltered(filtered);
+		// setFiltered(filtered);
+		return filtered;
+	};
+
+	const filterProfiles = profiles => {
+		if (profiles) {
+			let filtered = profiles.filter(
+				profile =>
+					(profile["Gender"] === selectedFilters.gender || !selectedFilters.gender) &&
+					(profile["PaymentMethod"] === selectedFilters.payment_method || !selectedFilters.payment_method) &&
+					(profile["CreditCardType"] === selectedFilters.cc_type || !selectedFilters.cc_type)
+			);
+			return filtered;
+		}
+		return null;
+	};
+
+	const searchAndFilterProfiles = () => {
+		let temp = searchProfiles();
+		if (temp) temp = filterProfiles(temp);
+		// pass data to run filter function on
+		else return;
+
+		setFiltered(temp);
+	};
+
+	const selectFilters = (key, value) => {
+		setSelectedFilters({ ...selectedFilters, [key]: value });
 	};
 
 	return (
@@ -148,11 +188,15 @@ function App() {
 									<label htmlFor="gender" className="content__filter-label">
 										Gender
 									</label>
-									<select className="content__filter-dropdown" id="gender">
+									<select
+										className="content__filter-dropdown"
+										id="gender"
+										onChange={e => selectFilters("gender", e.target.value)}
+									>
 										<option className="content__filter-option" value="">
 											All
 										</option>
-										{Array.from(filters.genders).map((option, i) => (
+										{Array.from(filterList.genders).map((option, i) => (
 											<option className="content__filter-option" key={i} value={option}>
 												{capitalize(option)}
 											</option>
@@ -163,11 +207,15 @@ function App() {
 									<label htmlFor="pm" className="content__filter-label">
 										Payment Method
 									</label>
-									<select className="content__filter-dropdown" id="pm">
+									<select
+										className="content__filter-dropdown"
+										id="pm"
+										onChange={e => selectFilters("payment_method", e.target.value)}
+									>
 										<option className="content__filter-option" value="">
 											All
 										</option>
-										{Array.from(filters.payment_methods).map((option, i) => (
+										{Array.from(filterList.payment_methods).map((option, i) => (
 											<option className="content__filter-option" key={i} value={option}>
 												{capitalize(option)}
 											</option>
@@ -178,11 +226,15 @@ function App() {
 									<label htmlFor="cc_type" className="content__filter-label">
 										Credit Card Type
 									</label>
-									<select className="content__filter-dropdown" id="cc_type">
+									<select
+										className="content__filter-dropdown"
+										id="cc_type"
+										onChange={e => selectFilters("cc_type", e.target.value)}
+									>
 										<option className="content__filter-option" value="">
 											All
 										</option>
-										{Array.from(filters.cc_types).map((option, i) => (
+										{Array.from(filterList.cc_types).map((option, i) => (
 											<option className="content__filter-option" key={i} value={option}>
 												{capitalize(option)}
 											</option>
