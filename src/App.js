@@ -277,6 +277,7 @@ function App() {
 											</tr>
 										))}
 								</table>
+								<Paginate pageCount={pageCount} onPageChange={handlePageClick} />
 							</figure>
 						) : (
 							<div className="no-content">
@@ -284,7 +285,6 @@ function App() {
 								<p className="no-content__desc"> No profiles were found. </p>
 							</div>
 						)}
-						<Paginate pageCount={pageCount} onPageChange={handlePageClick} />
 					</div>
 				) : loading ? (
 					<div className="no-content">
