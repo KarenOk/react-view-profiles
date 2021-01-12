@@ -255,7 +255,7 @@ function App() {
 																: avatarWhite
 														}
 														className="user__avatar content__table-img"
-														alt={profile["FirstName"]}
+														alt={profile["Gender"]}
 													/>
 												</div>
 											</td>
