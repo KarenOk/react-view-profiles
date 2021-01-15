@@ -63,8 +63,7 @@
 
 .app__content {
 	flex: 1;
-	background-color: white;
-	background-color: rgb(253, 247, 247);
+	background-color: #f3f9fa;
 }
 
 .content {
@@ -152,7 +151,7 @@
 }
 
 .content__table-row:not(:first-of-type):hover {
-	background-color: rgba(213, 64, 81, 0.1);
+	background-color: #c3f7fd;
 }
 
 .content__table-row:first-of-type {

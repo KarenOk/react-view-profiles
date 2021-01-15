@@ -18,8 +18,8 @@
 }
 
 .pagination > .active > a {
-	background-color: #d54051;
-	border-color: #d54051;
+	background-color: #06bfd4;
+	border-color: #06bfd4;
 	color: #fff;
 	font-weight: bolder;
 }
@@ -37,8 +37,8 @@
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-	background-color: #d54051;
-	border-color: #d54051;
+	background-color: #06bfd4;
+	border-color: #06bfd4;
 	outline: none;
 }
 
